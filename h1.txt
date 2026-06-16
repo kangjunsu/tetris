@@ -1,0 +1,36 @@
+    1  lsb_release -a
+    2  mkdir ~/work
+    3  cd ~/work
+    4  git config --global user.name "JunSu"
+    5  git config --global user.email rkdwnstn200@naver.com
+    6  git config --global pull.rebase false
+    7  gir config --global --list
+    8  git config --global --list
+    9  ssh-keygen
+   10  cat ~/.ssh/id_rsa.pub
+   11  git clone git@github.com:weable-kosa/kosa-vibecoding-2026-3rd.git
+   12  ls
+   13  cd doc
+   14  ls
+   15  cd doc
+   16  ls
+   17  cd kosa-vibecoding-2026-3rd
+   18  ls
+   19  cd doc
+   20  ls
+   21  cd ..
+   22  ls
+   23  cd src
+   24  ls
+   25  cd exercise
+   26  ls
+   27  cd kangjunsu
+   28  ls
+   29  cd day01
+   30  cd  day01
+   31  ls
+   32* mv `
+   33  mv ' day01' day01
+   34  ls
+   35  cd day01
+   36  history>h1.txt

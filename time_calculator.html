@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시간 계산기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        input[type="time"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="time"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .result-label {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            color: #333;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .time-inputs input {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⏰ 시간 계산기</h1>
+
+        <!-- 시간 차이 계산 -->
+        <div class="section">
+            <h2>📊 시간 차이 계산</h2>
+            <div class="input-group">
+                <label>시작 시간</label>
+                <input type="time" id="startTime" value="09:00">
+            </div>
+            <div class="input-group">
+                <label>종료 시간</label>
+                <input type="time" id="endTime" value="18:00">
+            </div>
+            <button onclick="calculateDifference()">차이 계산하기</button>
+            <div id="differenceResult" class="result" style="display: none;">
+                <div class="result-label">시간 차이</div>
+                <div class="result-value"></div>
+            </div>
+        </div>
+
+        <!-- 시간 더하기 -->
+        <div class="section">
+            <h2>➕ 시간 더하기</h2>
+            <div class="input-group">
+                <label>기준 시간</label>
+                <input type="time" id="baseTimeAdd" value="09:00">
+            </div>
+            <div class="input-group">
+                <label>추가할 시간</label>
+                <div class="time-inputs">
+                    <div>
+                        <input type="number" id="addHours" placeholder="시" min="0" value="2">
+                        <label style="text-align: center; margin-top: 5px;">시간</label>
+                    </div>
+                    <div>
+                        <input type="number" id="addMinutes" placeholder="분" min="0" max="59" value="30">
+                        <label style="text-align: center; margin-top: 5px;">분</label>
+                    </div>
+                    <div>
+                        <input type="number" id="addSeconds" placeholder="초" min="0" max="59" value="0">
+                        <label style="text-align: center; margin-top: 5px;">초</label>
+                    </div>
+                </div>
+            </div>
+            <button onclick="addTime()">시간 더하기</button>
+            <div id="addResult" class="result" style="display: none;">
+                <div class="result-label">결과 시간</div>
+                <div class="result-value"></div>
+            </div>
+        </div>
+
+        <!-- 시간 빼기 -->
+        <div class="section">
+            <h2>➖ 시간 빼기</h2>
+            <div class="input-group">
+                <label>기준 시간</label>
+                <input type="time" id="baseTimeSub" value="18:00">
+            </div>
+            <div class="input-group">
+                <label>뺄 시간</label>
+                <div class="time-inputs">
+                    <div>
+                        <input type="number" id="subHours" placeholder="시" min="0" value="1">
+                        <label style="text-align: center; margin-top: 5px;">시간</label>
+                    </div>
+                    <div>
+                        <input type="number" id="subMinutes" placeholder="분" min="0" max="59" value="30">
+                        <label style="text-align: center; margin-top: 5px;">분</label>
+                    </div>
+                    <div>
+                        <input type="number" id="subSeconds" placeholder="초" min="0" max="59" value="0">
+                        <label style="text-align: center; margin-top: 5px;">초</label>
+                    </div>
+                </div>
+            </div>
+            <button onclick="subtractTime()">시간 빼기</button>
+            <div id="subResult" class="result" style="display: none;">
+                <div class="result-label">결과 시간</div>
+                <div class="result-value"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 시간 차이 계산
+        function calculateDifference() {
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+
+            if (!startTime || !endTime) {
+                alert('시작 시간과 종료 시간을 입력해주세요.');
+                return;
+            }
+
+            const [startHour, startMin] = startTime.split(':').map(Number);
+            const [endHour, endMin] = endTime.split(':').map(Number);
+
+            let startTotalMinutes = startHour * 60 + startMin;
+            let endTotalMinutes = endHour * 60 + endMin;
+
+            // 종료 시간이 시작 시간보다 작으면 다음 날로 간주
+            if (endTotalMinutes < startTotalMinutes) {
+                endTotalMinutes += 24 * 60;
+            }
+
+            const diffMinutes = endTotalMinutes - startTotalMinutes;
+            const hours = Math.floor(diffMinutes / 60);
+            const minutes = diffMinutes % 60;
+
+            const resultDiv = document.getElementById('differenceResult');
+            resultDiv.style.display = 'block';
+            resultDiv.querySelector('.result-value').textContent =
+                `${hours}시간 ${minutes}분`;
+        }
+
+        // 시간 더하기
+        function addTime() {
+            const baseTime = document.getElementById('baseTimeAdd').value;
+            const addHours = parseInt(document.getElementById('addHours').value) || 0;
+            const addMinutes = parseInt(document.getElementById('addMinutes').value) || 0;
+            const addSeconds = parseInt(document.getElementById('addSeconds').value) || 0;
+
+            if (!baseTime) {
+                alert('기준 시간을 입력해주세요.');
+                return;
+            }
+
+            const [baseHour, baseMin] = baseTime.split(':').map(Number);
+            const baseSec = 0;
+
+            let totalSeconds = (baseHour * 3600) + (baseMin * 60) + baseSec;
+            totalSeconds += (addHours * 3600) + (addMinutes * 60) + addSeconds;
+
+            const resultHour = Math.floor(totalSeconds / 3600) % 24;
+            const resultMin = Math.floor((totalSeconds % 3600) / 60);
+            const resultSec = totalSeconds % 60;
+
+            const days = Math.floor(totalSeconds / (24 * 3600));
+
+            const resultDiv = document.getElementById('addResult');
+            resultDiv.style.display = 'block';
+
+            let resultText = `${String(resultHour).padStart(2, '0')}:${String(resultMin).padStart(2, '0')}:${String(resultSec).padStart(2, '0')}`;
+            if (days > 0) {
+                resultText += ` (+${days}일)`;
+            }
+
+            resultDiv.querySelector('.result-value').textContent = resultText;
+        }
+
+        // 시간 빼기
+        function subtractTime() {
+            const baseTime = document.getElementById('baseTimeSub').value;
+            const subHours = parseInt(document.getElementById('subHours').value) || 0;
+            const subMinutes = parseInt(document.getElementById('subMinutes').value) || 0;
+            const subSeconds = parseInt(document.getElementById('subSeconds').value) || 0;
+
+            if (!baseTime) {
+                alert('기준 시간을 입력해주세요.');
+                return;
+            }
+
+            const [baseHour, baseMin] = baseTime.split(':').map(Number);
+            const baseSec = 0;
+
+            let totalSeconds = (baseHour * 3600) + (baseMin * 60) + baseSec;
+            totalSeconds -= (subHours * 3600) + (subMinutes * 60) + subSeconds;
+
+            let days = 0;
+            while (totalSeconds < 0) {
+                totalSeconds += 24 * 3600;
+                days--;
+            }
+
+            const resultHour = Math.floor(totalSeconds / 3600) % 24;
+            const resultMin = Math.floor((totalSeconds % 3600) / 60);
+            const resultSec = totalSeconds % 60;
+
+            const resultDiv = document.getElementById('subResult');
+            resultDiv.style.display = 'block';
+
+            let resultText = `${String(resultHour).padStart(2, '0')}:${String(resultMin).padStart(2, '0')}:${String(resultSec).padStart(2, '0')}`;
+            if (days < 0) {
+                resultText += ` (${days}일)`;
+            }
+
+            resultDiv.querySelector('.result-value').textContent = resultText;
+        }
+    </script>
+</body>
+</html>
